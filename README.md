@@ -2,7 +2,7 @@
 
 ## 🚀 Live Demo
 
-**[Click here to try the live demo]()**
+**[Click here to try the live demo](https://tonmoy188.github.io/E-commerce-Cart/)**
 
 This is my **first JavaScript project**, developed to practice core JS concepts like classes, DOM manipulation and dynamic rendering.
 
