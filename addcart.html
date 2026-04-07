@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DESK — Workspace Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+  <style>
+    
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --border: #e8e6e1;
+  --text-primary: #1a1816;
+  --text-secondary: #7a7570;
+  --text-muted: #b0ada8;
+  --accent: #1a1816;
+  --accent-hover: #333; 
+  --green: #2d6a4f;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.14);
+  --font-sans: 'DM Sans', sans-serif;
+  --font-serif: 'DM Serif Display', serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(247, 246, 243, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.logo-dot { color: #c8a97e; }
+
+.nav-links span {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.cart-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cart-toggle:hover {
+  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: #fff;
+}
+
+.cart-toggle:hover svg { stroke: #fff; }
+
+.cart-badge {
+  background: var(--text-primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  transition: all 0.2s;
+}
+
+.cart-toggle:hover .cart-badge {
+  background: #fff;
+  color: var(--text-primary);
+}
+
+
+.hero {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 4rem 2rem;
+}
+
+.hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: #c8a97e;
+}
+
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 480px;
+}
+
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 5rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.product-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+
+.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.pill {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.pill:hover { border-color: var(--text-primary); color: var(--text-primary); }
+.pill.active { background: var(--text-primary); color: #fff; border-color: var(--text-primary); }
+
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+
+.product-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.product-image-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 72%;
+  overflow: hidden;
+  background: #f0ede8;
+}
+
+.product-image-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-image-wrap img {
+  transform: scale(1.04);
+}
+
+.product-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.9);
+  color: var(--text-secondary);
+  backdrop-filter: blur(4px);
+}
+
+.product-info {
+  padding: 1rem 1.1rem 1.1rem;
+}
+
+.product-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+
+.product-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.product-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.product-price {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.btn-add {
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.btn-add:hover {
+  background: var(--text-primary);
+  color: #fff;
+  border-color: var(--text-primary);
+}
+
+.btn-add.in-cart {
+  background: var(--text-primary);
+  color: #fff;
+  border-color: var(--text-primary);
+}
+
+
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 199;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.cart-overlay.open { opacity: 1; pointer-events: all; }
+
+
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 400px;
+  max-width: 100vw;
+  background: var(--surface);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 1px solid var(--border);
+}
+
+.cart-drawer.open { transform: translateX(0); }
+
+.cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.cart-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.cart-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+}
+
+.cart-close:hover { background: var(--bg); color: var(--text-primary); }
+
+.cart-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem;
+}
+
+
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.cart-empty p {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.cart-empty span {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+
+.cart-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+}
+
+.cart-item-img {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.cart-item-info { flex: 1; min-width: 0; }
+
+.cart-item-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item-qty {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.cart-item-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.cart-item-price {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.btn-remove {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.15s;
+  font-family: var(--font-sans);
+}
+
+.btn-remove:hover { color: #c00; }
+
+.cart-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cart-categories { display: flex; flex-direction: column; gap: 6px; }
+
+.cat-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.cat-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.cat-tag {
+  font-size: 0.72rem;
+  padding: 2px 9px;
+  border-radius: 20px;
+  background: var(--bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.cart-summary { display: flex; flex-direction: column; gap: 8px; }
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.summary-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 2px 0;
+}
+
+.free-tag { color: var(--green); font-weight: 500; }
+
+.total-row {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.btn-checkout {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--text-primary);
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 0.925rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  letter-spacing: 0.01em;
+}
+
+.btn-checkout:hover { background: var(--accent-hover); }
+
+.btn-clear {
+  width: 100%;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-clear:hover { color: #c00; border-color: #fcc; background: #fff5f5; }
+
+
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text-primary);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+
+@media (max-width: 600px) {
+  .hero { padding: 2.5rem 1.25rem; }
+  .main { padding: 1.75rem 1.25rem 4rem; }
+  .header-inner { padding: 0 1.25rem; }
+  .cart-drawer { width: 100vw; }
+  .section-header { flex-direction: column; align-items: flex-start; }
+}
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">DESK<span class="logo-dot">.</span></div>
+      <nav class="nav-links">
+        <span>Workspace Store</span>
+      </nav>
+      <button class="cart-toggle" onclick="toggleCart()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Cart
+        <span class="cart-badge" id="cart-badge">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">New arrivals — Spring 2025</p>
+      <h1 class="hero-title">Build your<br><em>perfect workspace.</em></h1>
+      <p class="hero-sub">Carefully curated tools for people who care about how they work.</p>
+    </div>
+  </section>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="section-header">
+      <h2 class="section-title">Products <span class="product-count" id="product-count"></span></h2>
+      <div class="filter-pills" id="filter-pills">
+        <button class="pill active" onclick="filterProducts('All', this)">All</button>
+        <button class="pill" onclick="filterProducts('Electronics', this)">Electronics</button>
+        <button class="pill" onclick="filterProducts('Stationery', this)">Stationery</button>
+        <button class="pill" onclick="filterProducts('Furniture', this)">Furniture</button>
+      </div>
+    </div>
+    <div class="product-grid" id="product-grid"></div>
+  </main>
+
+  <!-- CART OVERLAY -->
+  <div class="cart-overlay" id="cart-overlay" onclick="toggleCart()"></div>
+
+  <!-- CART DRAWER -->
+  <aside class="cart-drawer" id="cart-drawer">
+    <div class="cart-header">
+      <h2 class="cart-title">Your Cart</h2>
+      <button class="cart-close" onclick="toggleCart()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="cart-body">
+      <div class="cart-empty" id="cart-empty">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="opacity:0.3"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <p>Your cart is empty</p>
+        <span>Add something to get started.</span>
+      </div>
+      <div id="cart-items-list"></div>
+    </div>
+
+    <div class="cart-footer" id="cart-footer">
+      <div class="cart-categories">
+        <span class="cat-label">Categories in cart</span>
+        <div class="cat-tags" id="cat-tags"></div>
+      </div>
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span class="free-tag">Free</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-row total-row">
+          <span>Total</span>
+          <span id="cart-total">$0.00</span>
+        </div>
+      </div>
+      <button class="btn-checkout">Checkout &rarr;</button>
+      <button class="btn-clear" onclick="clearCart()">Clear cart</button>
+    </div>
+  </aside>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
