@@ -27,7 +27,7 @@ This is my **first JavaScript project**, developed to practice core JS concepts 
 
 - HTML5, CSS3, Vanilla JavaScript (ES6+)
 
-##What I Learned
+## What I Learned
  - Object-Oriented Programming using Javascript classes
  - Dynamic rendering and DOM manipulation
  - Working with modern array methods and Set
